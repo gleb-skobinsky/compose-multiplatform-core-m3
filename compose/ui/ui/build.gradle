@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 import androidx.build.AndroidXComposePlugin
 import androidx.build.LibraryType
 import org.jetbrains.androidx.build.JetBrainsAndroidXPlugin
@@ -25,6 +26,8 @@ plugins {
     id("AndroidXComposePlugin")
     id("kotlinx-atomicfu")
     id("JetBrainsAndroidXPlugin")
+    id("signing")
+    id("com.vanniktech.maven.publish")
 }
 
 AndroidXComposePlugin.applyAndConfigureKotlinPlugin(project)
@@ -157,24 +160,24 @@ if(AndroidXComposePlugin.isMultiplatformEnabled(project)) {
          */
         sourceSets {
             commonMain.dependencies {
-                implementation(project(":annotation:annotation"))
-                implementation(project(":collection:collection"))
+                implementation("androidx.annotation:annotation:1.9.0")
+                implementation("androidx.collection:collection:1.5.0")
                 implementation(libs.kotlinStdlib)
                 implementation(libs.kotlinCoroutinesCore)
 
                 // when updating the runtime version please also update the runtime-saveable version
-                implementation(project(":compose:runtime:runtime"))
+                implementation("org.jetbrains.compose.runtime:runtime:1.10.0-beta01")
                 // We do not publish runtime-retain from the fork (it's KMP-compatible from the start)
                 // api(project(":compose:runtime:runtime-retain"))
                 def composeVersion = project.findProperty('artifactRedirection.version.androidx.compose')
                 api("androidx.compose.runtime:runtime-retain:$composeVersion")
-                api(project(":compose:runtime:runtime-saveable"))
 
-                api project(":compose:ui:ui-geometry")
-                api project(":compose:ui:ui-graphics")
-                api project(":compose:ui:ui-text")
-                api project(":compose:ui:ui-unit")
-                api project(":compose:ui:ui-util")
+                api("org.jetbrains.compose.runtime:runtime-saveable:1.10.0-beta01")
+                api("org.jetbrains.compose.ui:ui-geometry:1.10.0-beta01")
+                api("org.jetbrains.compose.ui:ui-graphics:1.10.0-beta01")
+                api("org.jetbrains.compose.ui:ui-text:1.10.0-beta01")
+                api("org.jetbrains.compose.ui:ui-unit:1.10.0-beta01")
+                api("org.jetbrains.compose.ui:ui-util:1.10.0-beta01")
                 api("org.jetbrains.androidx.lifecycle:lifecycle-common:2.9.5")
                 implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime:2.9.5")
                 implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.9.5")
@@ -207,13 +210,13 @@ if(AndroidXComposePlugin.isMultiplatformEnabled(project)) {
             skikoMain {
                 dependsOn(commonMain)
                 dependencies {
-                    api(project(":compose:ui:ui-graphics"))
-                    api(project(":compose:ui:ui-text"))
+                    api("org.jetbrains.compose.ui:ui-graphics:1.10.0-beta01")
+                    api("org.jetbrains.compose.ui:ui-text:1.10.0-beta01")
                     api(libs.skikoCommon)
                     implementation(libs.atomicFu)
 
                     // Keep this dependency for compatibility due to https://youtrack.jetbrains.com/issue/KT-60874
-                    implementation(project(":compose:ui:ui-backhandler"))
+                    implementation("org.jetbrains.compose.ui:ui-backhandler:1.10.0-beta01")
 
                     // Use direct dependency to AOSP's artifact instead of using project reference
                     // because this module supports all KMP platforms from the beginning.
@@ -545,5 +548,41 @@ def verifyKotlinModule(String variant) {
 if (!AndroidXComposePlugin.isMultiplatformEnabled(project)) {
     for (variant in ["debug", "release"]) {
         verifyKotlinModule(variant)
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates("io.github.gleb-skobinsky", "compose-ui", "1.0.0")
+
+    pom {
+        name = "Compose-UI"
+        description = "Compose multiplarform Compose UI fork for the PassDPI App"
+        inceptionYear = "2025"
+        url = "https://github.com/gleb-skobinsky/compose-multiplatform-core-m3"
+
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "skobinsky"
+                name = "Gleb Gutnik"
+                url = "https://github.com/gleb-skobinsky"
+            }
+        }
+        scm {
+            url = "https://github.com/gleb-skobinsky/compose-multiplatform-core-m3"
+            connection = "scm:git:git://github.com/gleb-skobinsky/compose-multiplatform-core-m3.git"
+            developerConnection =
+                    "scm:git:ssh://git@github.com/gleb-skobinsky/compose-multiplatform-core-m3.git"
+        }
     }
 }

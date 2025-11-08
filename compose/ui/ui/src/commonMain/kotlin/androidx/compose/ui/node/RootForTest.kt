@@ -18,7 +18,6 @@
 
 package androidx.compose.ui.node
 
-import androidx.compose.ui.ExperimentalIndirectPointerApi
 import androidx.compose.ui.input.indirect.IndirectPointerEvent
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.SemanticsOwner
@@ -50,7 +49,7 @@ interface RootForTest {
      *
      * @return true if the event was consumed. False otherwise.
      */
-    @ExperimentalIndirectPointerApi
+    //@ExperimentalIndirectPointerApi
     fun sendIndirectPointerEvent(indirectPointerEvent: IndirectPointerEvent): Boolean = false
 
     /**
