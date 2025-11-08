@@ -18,7 +18,7 @@ package androidx.compose.ui.input.pointer
 
 import platform.AppKit.NSCursor
 
-internal data class MacosCursor(val cursor: NSCursor): PointerIcon
+data class MacosCursor(val cursor: NSCursor): PointerIcon
 
 internal actual val pointerIconDefault: PointerIcon = MacosCursor(NSCursor.arrowCursor)
 internal actual val pointerIconCrosshair: PointerIcon = MacosCursor(NSCursor.crosshairCursor)
