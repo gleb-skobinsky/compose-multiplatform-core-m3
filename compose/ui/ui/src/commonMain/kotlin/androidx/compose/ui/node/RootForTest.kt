@@ -23,6 +23,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.SemanticsOwner
 import androidx.compose.ui.text.input.TextInputService
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.ExperimentalIndirectPointerApi
 
 /**
  * The marker interface to be implemented by the root backing the composition. To be used in tests.
@@ -49,7 +50,7 @@ interface RootForTest {
      *
      * @return true if the event was consumed. False otherwise.
      */
-    //@ExperimentalIndirectPointerApi
+    @ExperimentalIndirectPointerApi
     fun sendIndirectPointerEvent(indirectPointerEvent: IndirectPointerEvent): Boolean = false
 
     /**

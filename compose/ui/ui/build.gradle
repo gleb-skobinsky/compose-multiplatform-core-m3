@@ -160,7 +160,7 @@ if(AndroidXComposePlugin.isMultiplatformEnabled(project)) {
          */
         sourceSets {
             commonMain.dependencies {
-                implementation("androidx.annotation:annotation:1.9.0")
+                implementation("org.jetbrains.compose.annotation-internal:annotation:1.10.0-beta01")
                 implementation("androidx.collection:collection:1.5.0")
                 implementation(libs.kotlinStdlib)
                 implementation(libs.kotlinCoroutinesCore)
@@ -556,7 +556,7 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates("io.github.gleb-skobinsky", "compose-ui", "1.0.0")
+    coordinates("io.github.gleb-skobinsky", "compose-ui", "1.0.1")
 
     pom {
         name = "Compose-UI"
